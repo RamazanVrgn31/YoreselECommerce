@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .content {
+            padding: 20px 0;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Siparişiniz Alındı! 📦</h2>
+        </div>
+        <div class="content">
+            <p>Sayın <strong>{{MusteriAdi}}</strong>,</p>
+            <p>Siparişiniz başarıyla oluşturuldu. Ödemeniz alındı ve ürünleriniz hazırlanmaya başlandı.</p>
+
+            <h3>Sipariş Detayları</h3>
+            <p><strong>Sipariş No:</strong> {{SiparisNo}}</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ürün / Açıklama</th>
+                        <th>Tutar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sipariş Toplamı</td>
+                        <td>{{Tutar}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            <p>Bu mesaj otomatik olarak gönderilmiştir. Lütfen cevaplamayınız.</p>
+            <p>© 2026 Yöresel E-Ticaret</p>
+        </div>
+    </div>
+</body>
+</html>
