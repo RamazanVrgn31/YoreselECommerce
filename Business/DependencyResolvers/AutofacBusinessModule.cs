@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Adapters.Payment;
+using Business.Concrete;
 using Castle.DynamicProxy;
 using Core.Utilities.Interceptors;
 using DataAccess.Concrete.EntityFramework.Contexts;
@@ -36,6 +37,7 @@ namespace Business.DependencyResolvers
             var assembly = Assembly.GetExecutingAssembly();
 
             builder.RegisterType<MsDbContext>().As<ProjectDbContext>().SingleInstance();
+            builder.RegisterType<BasketManager>().As<IBasketService>().SingleInstance();
 
             // Ödeme servisi (Iyzico Adaptörü)
             builder.RegisterType<IyzicoPaymentAdapter>().As<IPaymentService>().SingleInstance();

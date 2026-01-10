@@ -3,6 +3,7 @@ using System.Reflection;
 using Core.ApiDoc;
 using Core.CrossCuttingConcerns.Caching;
 using Core.CrossCuttingConcerns.Caching.Microsoft;
+using Core.CrossCuttingConcerns.Caching.Redis;
 using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.IoC;
 using Core.Utilities.Mail;
@@ -21,8 +22,23 @@ namespace Core.DependencyResolvers
     {
         public void Load(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMemoryCache();
-            services.AddSingleton<ICacheManager, MemoryCacheManager>();
+            //services.AddMemoryCache();
+            //services.AddSingleton<ICacheManager, MemoryCacheManager>();
+
+            // 1. Redis Konfigürasyonu (IDistributedCache servisini oluşturur)
+            services.AddStackExchangeRedisCache(options =>
+            {
+                // Docker'daki Redis adresi. (appsettings.json'dan da okuyabilirsin)
+                options.Configuration = "localhost:6379";
+                // options.Configuration = redisConfig["Host"] + ":" + redisConfig["Port"]; // Appsettings kullanırsan
+
+                options.InstanceName = "YoreselEcommerce_";
+            });
+
+            // 2. ICacheManager istendiğinde RedisCacheManager ver
+            services.AddSingleton<ICacheManager, RedisCacheManager>();
+
+
             services.AddSingleton<IMailService, MailManager>();
             services.AddSingleton<IEmailConfiguration, EmailConfiguration>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using System;
+using Serilog;
 
 namespace Core.CrossCuttingConcerns.Logging.Serilog
 {
@@ -12,5 +13,7 @@ namespace Core.CrossCuttingConcerns.Logging.Serilog
         public void Warn(string message) => Logger.Warning(message);
         public void Debug(string message) => Logger.Debug(message);
         public void Error(string message) => Logger.Error(message);
+
+        public void Warn(Exception ex, string message) => Logger.Warning(ex, message);
     }
 }

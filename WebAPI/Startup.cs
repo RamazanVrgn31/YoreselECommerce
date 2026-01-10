@@ -136,6 +136,7 @@ namespace WebAPI
                 });
             });
             services.AddMassTransitHostedService();
+           
 
             base.ConfigureServices(services);
         }
