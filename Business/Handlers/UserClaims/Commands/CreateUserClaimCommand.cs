@@ -29,9 +29,9 @@ namespace Business.Handlers.UserClaims.Commands
                 _cacheManager = cacheManager;
             }
 
-            [SecuredOperation(Priority = 1)]
-            [CacheRemoveAspect()]
-            [LogAspect(typeof(FileLogger))]
+            [SecuredOperation("Admin")]
+            [CacheRemoveAspect("GetOrdersQuery")]
+            [LogAspect(typeof(MsSqlLogger))]
             public async Task<IResult> Handle(CreateUserClaimCommand request, CancellationToken cancellationToken)
             {
                 var userClaim = new UserClaim

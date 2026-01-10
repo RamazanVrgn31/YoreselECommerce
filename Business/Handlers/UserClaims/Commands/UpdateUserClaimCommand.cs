@@ -32,9 +32,9 @@ namespace Business.Handlers.UserClaims.Commands
                 _cacheManager = cacheManager;
             }
 
-            [SecuredOperation(Priority = 1)]
-            [CacheRemoveAspect()]
-            [LogAspect(typeof(FileLogger))]
+            [SecuredOperation("Admin")]
+            [CacheRemoveAspect("GetOrdersQuery")]
+            [LogAspect(typeof(MsSqlLogger))]
             public async Task<IResult> Handle(UpdateUserClaimCommand request, CancellationToken cancellationToken)
             {
                 var userList = request.ClaimId.Select(x => new UserClaim() { ClaimId = x, UserId = request.UserId });

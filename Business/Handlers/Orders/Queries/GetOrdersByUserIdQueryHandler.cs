@@ -28,8 +28,8 @@ namespace Business.Handlers.Orders.Queries
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [SecuredOperation] // Sadece login gerekli, kullanıcı kendi siparişlerini görebilir
         [LogAspect(typeof(MsSqlLogger), Priority = 0)]
-        [SecuredOperation(Priority = 1)] // Sadece giriş yapmış kullanıcılar görebilsin
         public async Task<IDataResult<IEnumerable<Order>>> Handle(GetOrdersByUserIdQuery request, CancellationToken cancellationToken)
         {
             // 1. Token'dan ID'yi çek (Tek satır!)

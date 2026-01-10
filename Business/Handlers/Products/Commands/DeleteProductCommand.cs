@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Runtime.Internal;
+using Business.BusinessAspects;
 using Core.Aspects.Autofac.Caching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -27,6 +28,7 @@ namespace Business.Handlers.Products.Commands
             _productDal = productDal;
         }
 
+        [SecuredOperation("Admin")]
         [CacheRemoveAspect("GetProduct")]
         public async Task<IResult> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {

@@ -10,6 +10,7 @@ using Business.BusinessAspects;
 using Business.Events;
 using Business.Handlers.Orders.Rules;
 using Business.Handlers.Orders.Validation_Rules.Fluent_Validation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
@@ -45,6 +46,7 @@ namespace Business.Handlers.Orders.Commands
     }
 
     // 2. KISIM: İŞLEYİCİ (İsteği nasıl işleyeceğiz?)
+    [CacheRemoveAspect("GetOrdersQuery")]
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, IResult>
     {
         // Üç tabloyla da işimiz olduğu için üçünü de çağırıyoruz
@@ -81,6 +83,7 @@ namespace Business.Handlers.Orders.Commands
             _basketService = basketService;
         }
 
+        [SecuredOperation] // Sadece login gerekli, normal kullanıcılar sipariş oluşturabilir
         [LogAspect(typeof(MsSqlLogger), Priority = 0)]
         [ValidationAspect(typeof(CreateOrderValidator), Priority = 2)]
         public async Task<IResult> Handle(CreateOrderCommand request, CancellationToken cancellationToken)

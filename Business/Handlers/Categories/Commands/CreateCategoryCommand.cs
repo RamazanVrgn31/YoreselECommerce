@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Runtime.Internal;
+using Business.BusinessAspects;
 using Core.Aspects.Autofac.Caching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -30,6 +31,7 @@ namespace Business.Handlers.Categories.Commands
             _categoryDal = categoryDal;
         }
 
+        [SecuredOperation("Admin")]
         [CacheRemoveAspect("GetCategoriesQuery")]
         public async Task<IResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {

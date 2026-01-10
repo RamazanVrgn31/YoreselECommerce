@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Runtime.Internal;
+using Business.BusinessAspects;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Validation;
@@ -52,6 +53,7 @@ namespace Business.Handlers.Products.Commands
 
 
 
+        [SecuredOperation("Admin")]
         [ValidationAspect(typeof(CreateProductValidator), Priority = 1)]
         [LogAspect(typeof(MsSqlLogger), Priority =0)]
         [CacheRemoveAspect("GetProduct")]

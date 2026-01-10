@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Business.BusinessAspects;
 using Core.Aspects.Autofac.Caching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -27,6 +28,7 @@ namespace Business.Handlers.Categories.Commands
             _categoryDal = categoryDal;
         }
 
+        [SecuredOperation("Admin")]
         [CacheRemoveAspect("GetCategoriesQuery")]
         public Task<IResult> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
