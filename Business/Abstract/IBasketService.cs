@@ -18,5 +18,7 @@ namespace Business.Abstract
 
         // Sipariş tamamlanınca sepeti siler
         IResult DeleteBasket(string userId);
+
+        IResult AddItemToBasket(string userId, BasketItemDto basketItemDto);
     }
 }

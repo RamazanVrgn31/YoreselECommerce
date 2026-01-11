@@ -1,0 +1,59 @@
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-cart3"></i> Sepetim</h2>
+
+    @if(basketItems.length === 0) {
+        <div class="alert alert-warning text-center">
+            Sepetinizde ürün bulunmamaktadır. <br>
+            <a routerLink="/home" class="btn btn-primary mt-3">Alışverişe Başla</a>
+        </div>
+    }
+
+    @if(basketItems.length > 0) {
+        <div class="row">
+            <div class="col-md-9">
+                <table class="table table-hover shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Ürün</th>
+                            <th>Fiyat</th>
+                            <th>Adet</th>
+                            <th>Toplam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of basketItems; track item.productId) {
+                            <tr>
+                                <td>{{ item.productName }}</td>
+                                <td>{{ item.price | currency:'TRY':'symbol-narrow':'1.2-2' }}</td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ item.quantity }}</span>
+                                </td>
+                                <td class="fw-bold">
+                                    {{ (item.price * item.quantity) | currency:'TRY':'symbol-narrow':'1.2-2' }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        Sipariş Özeti
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">
+                            Toplam: {{ totalAmount | currency:'TRY':'symbol-narrow':'1.2-2' }}
+                        </h5>
+                        <div class="d-grid">
+                            <button class="btn btn-success">
+                                Siparişi Tamamla <i class="bi bi-check-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

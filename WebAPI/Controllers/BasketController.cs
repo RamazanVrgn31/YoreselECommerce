@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Extensions;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,8 @@ namespace WebAPI.Controllers
         {
             // Token'dan UserId'yi okuyoruz (Extensions klasöründeki ClaimExtensions sayesinde)
             // Eğer test yaparken Token yoksa, elle bir ID string'i verebilirsin şimdilik.
-            // string userId = User.GetUserId().ToString();
+             string userId = User.GetUserId().ToString();
 
-            string userId = "1"; // Şimdilik test için sabit verelim, Token sistemin tam oturunca yukarıdakini açarsın.
             var result = _basketService.GetBasket(userId);
             if (result.Success)
             {
@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
         [HttpPost("update")]
         public IActionResult UpdateBasket([FromBody] BasketDto basketDto)
         {
-            string userId = "1"; // Şimdilik test için sabit verelim, Token sistemin tam oturunca User.GetUserId() kullanırsın.
+            string userId = User.GetUserId().ToString();
             var result = _basketService.UpdateBasket(userId, basketDto);
             if (result.Success)
             {
@@ -47,8 +47,20 @@ namespace WebAPI.Controllers
         [HttpDelete("delete")]
         public IActionResult DeleteBasket()
         {
-            string userId = "1"; // Şimdilik test için sabit verelim, Token sistemin tam oturunca User.GetUserId() kullanırsın.
+            string userId = User.GetUserId().ToString();
             var result = _basketService.DeleteBasket(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("additem")]
+        public IActionResult AddItemToBasket([FromBody] BasketItemDto basketItemDto)
+        {
+            string userId = User.GetUserId().ToString();
+            var result = _basketService.AddItemToBasket(userId, basketItemDto);
             if (result.Success)
             {
                 return Ok(result);

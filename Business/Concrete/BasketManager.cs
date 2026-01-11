@@ -51,5 +51,33 @@ namespace Business.Concrete
             _distributedCache.Remove(key);
             return new SuccessResult("Sepet Temizlendi");
         }
+
+        public IResult AddItemToBasket(string userId, BasketItemDto basketItemDto)
+        {
+            var basketResult = GetBasket(userId);
+            var basket = basketResult.Data;
+
+            if (basket == null)
+            {
+                basket = new BasketDto();
+            }
+
+            // 2. Ürün sepette zaten var mı kontrol et?
+            var existingItem = basket.Items.FirstOrDefault(i => i.ProductId == basketItemDto.ProductId);
+
+            if (existingItem != null)
+            {
+                // Ürün zaten varsa, miktarını artır
+                existingItem.Quantity += basketItemDto.Quantity;
+            }
+            else
+            {
+                // Ürün yoksa, yeni ürünü sepete ekle
+                basket.Items.Add(basketItemDto);
+            }
+
+            // 3. Güncellenmiş sepeti Redis'e kaydet (Mevcut Update metodunu kullanıyoruz)
+            return UpdateBasket(userId, basket);
+        }
     }
 }
