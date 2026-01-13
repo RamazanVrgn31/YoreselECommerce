@@ -39,6 +39,16 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("getbycategory")]
+        public async Task<IActionResult> GetByCategory(int categoryId)
+        {
+            var result = await _mediator.Send(new GetProductsByCategoryIdQuery { CategoryId = categoryId });
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromForm] CreateProductCommand createProductCommand)

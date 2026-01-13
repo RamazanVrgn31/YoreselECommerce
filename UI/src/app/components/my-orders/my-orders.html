@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <h2 class="mb-4"><i class="bi bi-box-seam"></i> Sipariş Geçmişim</h2>
+
+  @if (orders().length === 0 && dataLoaded()) {
+  <div class="alert alert-info shadow-sm">
+    <i class="bi bi-info-circle"></i> Henüz hiç siparişiniz yok.
+    <a routerLink="/home" class="alert-link">Hemen alışverişe başla!</a>
+  </div>
+  } @if (orders().length > 0) {
+  <div class="card shadow border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 align-middle">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th scope="col" class="py-3 ps-3">Sipariş No</th>
+              <th scope="col" class="py-3">Tarih</th>
+              <th scope="col" class="py-3">Adres</th>
+              <th scope="col" class="py-3">Durum</th>
+              <th scope="col" class="py-3 text-end">Sipariş Tutarı</th>
+              <th scope="col" class="py-3 pe-3 text-end">Sipariş Detayı</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (order of orders(); track order.orderId) {
+            <tr>
+              <td class="ps-3 fw-bold">#{{ order.orderId }}</td>
+
+              <td>
+                <div class="d-flex flex-column">
+                  <span>{{ order.orderDate | date : 'dd.MM.yyyy' }}</span>
+                  <small class="text-muted">{{ order.orderDate | date : 'HH:mm' }}</small>
+                </div>
+              </td>
+
+              <td style="max-width: 250px" class="text-truncate" title="{{ order.address }}">
+                {{ order.address }}
+              </td>
+
+              <td>
+                @if (order.status === 'Onaylandı') {
+                <span class="badge bg-success bg-opacity-75">
+                  <i class="bi bi-check-circle-fill"></i> {{ order.status }}
+                </span>
+                } @else {
+                <span class="badge bg-warning text-dark">
+                  <i class="bi bi-hourglass-split"></i> {{ order.status }}
+                </span>
+                }
+              </td>
+
+              <td class="pe-3 text-end fw-bold text-primary fs-5">
+                {{ order.totalAmount | currency : 'TRY' : 'symbol-narrow' : '1.2-2' }}
+              </td>
+              <td class="text-end">
+                <a [routerLink]="['/order-details', order.orderId]" class="btn btn-primary btn-sm">
+                  Detay <i class="bi bi-chevron-right"></i>
+                </a>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  }
+</div>

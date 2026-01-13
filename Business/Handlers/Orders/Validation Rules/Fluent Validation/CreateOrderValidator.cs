@@ -48,9 +48,9 @@ namespace Business.Handlers.Orders.Validation_Rules.Fluent_Validation
                 .NotEmpty().WithMessage("Son kullanma yılı gereklidir.")
                 .MinimumLength(2).WithMessage("Yıl bilgisi geçersiz.");
 
-            RuleFor(x => x.PaymentDto.Cvc)
-                .NotEmpty().WithMessage("CVC kodu gereklidir.")
-                .Length(3, 4).WithMessage("CVC kodu 3 veya 4 haneli olmalıdır.");
+            RuleFor(x => x.PaymentDto.Cvv)
+                .NotEmpty().WithMessage("CVV kodu gereklidir.")
+                .Length(3, 4).WithMessage("CVV kodu 3 veya 4 haneli olmalıdır.");
         }
     }
 }

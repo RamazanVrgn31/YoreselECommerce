@@ -1,20 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnInit, signal } from '@angular/core';
 import { BasketService } from '../../services/Basket/basket';
 import { BasketItem } from '../../models/basket';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-basket',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './basket.html',
   styleUrl: './basket.scss',
 })
 export class Basket implements OnInit {
-  basketItems: BasketItem[] = [];
-  totalAmount: number = 0;
+  basketItems= signal<BasketItem[]>([]);
+  totalAmount = computed(() => {
+      return this.basketItems().reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  });
 
-  constructor(private basketService: BasketService) {}
+  constructor(private basketService: BasketService,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.getBasket();
@@ -27,21 +30,30 @@ export class Basket implements OnInit {
         // KUTUYU AÇIYORUZ: res.data bir BasketDto'dur.
         // Bize içindeki 'items' listesi lazım.
         if(response.data && response.data.items) {
-          this.basketItems = response.data.items;
+          this.basketItems.set(response.data.items);
         }
-        this.calculateTotal();
+        else{
+          this.basketItems.set([]);
+        }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.log("Sepet Yüklenirken Hata:", err);
+        this.cdr.detectChanges();
       }
     });
   }
 
-  calculateTotal() {
-    this.totalAmount = 0;
-    this.basketItems.forEach(item => {
-      // Backend'den gelen veriye göre: item.price * item.quantity
-      this.totalAmount += item.price * item.quantity;
-    });
+  clearBasket() {
+    if(confirm("Sepeti tamamen boşaltmak istediğinize emin misiniz?")) {
+      this.basketService.delete().subscribe({
+        next: (res) => {
+          this.getBasket(); // Listeyi yenile (Boş gelecek)
+        },
+        error: (err) => {
+          console.log("Hata:", err);
+        }
+      });
+    }
   }
 }

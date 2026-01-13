@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
 using Entities.Dtos;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -14,10 +15,12 @@ namespace Business.Concrete
     public class BasketManager : IBasketService
     {
         private readonly IDistributedCache _distributedCache;
+        private readonly IProductDal _productDal;
 
-        public BasketManager(IDistributedCache distributedCache)
+        public BasketManager(IDistributedCache distributedCache, IProductDal productDal)
         {
             _distributedCache = distributedCache;
+            _productDal = productDal;
         }
 
         public IDataResult<BasketDto> GetBasket(string userId)
@@ -72,7 +75,18 @@ namespace Business.Concrete
             }
             else
             {
-                // Ürün yoksa, yeni ürünü sepete ekle
+                // C. YOKSA: Veritabanından Ürün Bilgilerini Çek
+                var product = _productDal.Get(p => p.Id == basketItemDto.ProductId);
+                if (product == null)
+                {
+                    return new ErrorResult("Ürün bulunamadı.");
+                }
+
+                // Ürün bilgilerini BasketItemDto'ya ekle
+                basketItemDto.ProductName = product.ProductName;
+                basketItemDto.Price = product.Price;
+
+                //  yeni ürünü sepete ekle
                 basket.Items.Add(basketItemDto);
             }
 

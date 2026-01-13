@@ -94,9 +94,8 @@ namespace Business.Handlers.Orders.Commands
             //if (currentUserId == null) return new ErrorResult("Kullanıcı bulunamadı.");
 
             // --- ADIM 0: KULLANICI VE SEPETİ BUL ---
-            // Şimdilik test için sabit ID veriyoruz (Token sistemi tam oturunca alttakini açarsın)
-            // var userId = _httpContextAccessor.HttpContext.User.GetUserId().ToString();
-            var userId = "1"; // Test için sabit
+             var userId = _httpContextAccessor.HttpContext.User.GetUserId().ToString();
+            //var userId = "1"; // Test için sabit
 
             var basketResult = _basketService.GetBasket(userId);
             var basket = basketResult.Data;

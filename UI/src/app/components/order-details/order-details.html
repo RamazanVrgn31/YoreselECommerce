@@ -1,0 +1,43 @@
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3><i class="bi bi-receipt"></i> Sipariş Detayı (#{{ orderId }})</h3>
+        <a routerLink="/my-orders" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Geri Dön
+        </a>
+    </div>
+
+    @if (dataLoaded() && details().length > 0) {
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Ürün Adı</th>
+                            <th class="text-center">Adet</th>
+                            <th class="text-end">Birim Fiyat</th>
+                            <th class="text-end">Toplam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of details(); track item.productName) {
+                            <tr>
+                                <td>{{ item.productName }}</td>
+                                <td class="text-center">{{ item.quantity }}</td>
+                                <td class="text-end">
+                                    {{ item.price | currency:'TRY':'symbol-narrow':'1.2-2' }}
+                                </td>
+                                <td class="text-end fw-bold">
+                                    {{ item.total | currency:'TRY':'symbol-narrow':'1.2-2' }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    } @else if (dataLoaded() && details().length === 0) {
+        <div class="alert alert-warning">
+            Bu siparişe ait detay bulunamadı.
+        </div>
+    }
+</div>

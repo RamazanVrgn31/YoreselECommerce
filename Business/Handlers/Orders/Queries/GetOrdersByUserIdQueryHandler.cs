@@ -11,13 +11,14 @@ using Core.Extensions;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using ServiceStack;
 
 namespace Business.Handlers.Orders.Queries
 {
-    public class GetOrdersByUserIdQueryHandler : IRequestHandler<GetOrdersByUserIdQuery, IDataResult<IEnumerable<Order>>>
+    public class GetOrdersByUserIdQueryHandler : IRequestHandler<GetOrdersByUserIdQuery, IDataResult<IEnumerable<OrderDto>>>
     {
         private readonly IOrderDal _orderDal;
         private readonly IHttpContextAccessor _httpContextAccessor; // Token okumak için lazım
@@ -30,20 +31,31 @@ namespace Business.Handlers.Orders.Queries
 
         [SecuredOperation] // Sadece login gerekli, kullanıcı kendi siparişlerini görebilir
         [LogAspect(typeof(MsSqlLogger), Priority = 0)]
-        public async Task<IDataResult<IEnumerable<Order>>> Handle(GetOrdersByUserIdQuery request, CancellationToken cancellationToken)
+        public async Task<IDataResult<IEnumerable<OrderDto>>> Handle(GetOrdersByUserIdQuery request, CancellationToken cancellationToken)
         {
             // 1. Token'dan ID'yi çek (Tek satır!)
             var currendUserId = _httpContextAccessor.HttpContext.User.GetUserId();
             if (currendUserId == null)
             {
-                return new ErrorDataResult<IEnumerable<Order>>("Kullanıcı bulunamadı.");
+                return new ErrorDataResult<IEnumerable<OrderDto>>("Kullanıcı bulunamadı.");
             }
 
             // 2. Sadece bu ID'ye ait siparişleri veritabanından iste
             // (x => x.CustomerId == currentUserId) filtresi işi bitirir.
             var myOrders = await _orderDal.GetListAsync(x => x.CustomerId == currendUserId.Value);
 
-            return new SuccessDataResult<IEnumerable<Order>>(myOrders);
+            var orderDtos= myOrders.Select(order => new OrderDto
+            {
+                OrderId = order.Id,
+                CustomerId = order.CustomerId,
+                OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount,
+                Status = order.Status,
+                Address = order.Address
+            });
+            var sortedOrders = orderDtos.OrderByDescending(x => x.OrderDate).ToList();
+
+            return new SuccessDataResult<IEnumerable<OrderDto>>(sortedOrders);
         }
     }
 }

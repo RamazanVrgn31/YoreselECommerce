@@ -13,7 +13,7 @@ namespace Entities.Dtos
         public string CardNumber { get; set; }     // 16 haneli numara
         public string ExpireMonth { get; set; }    // Son kullanma Ayı
         public string ExpireYear { get; set; }     // Son kullanma Yılı
-        public string Cvc { get; set; }            // Arkadaki 3 haneli kod
+        public string Cvv { get; set; }            // Arkadaki 3 haneli kod
         public decimal Price { get; set; }         // Çekilecek tutar
     }
 }

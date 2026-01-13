@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Extensions;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BasketController : ControllerBase
     {
         private readonly IBasketService _basketService;

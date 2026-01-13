@@ -41,6 +41,17 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("getdetails")]
+        public async Task<IActionResult> GetOrderDetails(int orderId)
+        {
+            var result = await _mediator.Send(new GetOrderDetailsQuery { OrderId = orderId });
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)

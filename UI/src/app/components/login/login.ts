@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { Auth } from '../../services/Auth/auth';
+import {  AuthService } from '../../services/Auth/auth';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,7 @@ export class Login {// Dosya adın 'Login' ise böyle kalabilir, ama standart 'L
     password: ''
   };
   constructor(
-    private authService: Auth, // Auth servisini kullanmak için
+    private authService: AuthService, // Auth servisini kullanmak için
     private router: Router // Sayfa yönlendirmesi için
   ) { }
 
@@ -32,10 +32,11 @@ export class Login {// Dosya adın 'Login' ise böyle kalabilir, ama standart 'L
         if (res.success) {
           localStorage.setItem('token', res.data.token);
           alert('Giriş başarılı! Ana sayfaya yönlendiriliyorsunuz.');
+          this.router.navigate(['/home']);
           // this.router.navigate(['/dashboard']); // İleride açacağız
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         // 2. Hata varsa kullanıcıya bildir
         console.error("Giriş Hatası:", err);
         alert("Giriş başarısız!" + (err.error?.message || "Sunucu hatası."));

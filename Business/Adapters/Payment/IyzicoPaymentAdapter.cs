@@ -57,7 +57,7 @@ namespace Business.Adapters.Payment
                     CardNumber = paymentDto.CardNumber,
                     ExpireMonth = paymentDto.ExpireMonth,
                     ExpireYear = paymentDto.ExpireYear,
-                    Cvc = paymentDto.Cvc,
+                    Cvc = paymentDto.Cvv,
                     RegisterCard = 0 // Kartı kaydetme
                 },
 
